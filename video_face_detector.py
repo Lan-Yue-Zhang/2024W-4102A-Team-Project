@@ -32,7 +32,11 @@ time.sleep(2.0)
 while True:
     # Grab the image from the video stream, resize it and then convert it to grayscale
     frame = vs.read()
-    frame = imutils.resize(frame, width=500)
+    try:
+      frame = imutils.resize(frame, width=500)
+    except:
+      continue
+      
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     # Perform face detection
     print("[INFO] Performing face detection...")
