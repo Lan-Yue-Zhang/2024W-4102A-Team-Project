@@ -4,32 +4,28 @@ import imutils
 import time
 import cv2
 import os
-# Construct the argument parser and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-c", "--cascade", type=str, default="cascades",
-                help="Path to haar cascade face detector .xml file")
-args = vars(ap.parse_args())
-detectorPaths = {"face": "haarcascade_frontalface_default.xml",
-                 "eyes": "haarcascade_eye.xml",
-                 "smile": "haarcascade_smile.xml"}
+
+detectorPaths = {"face": "cascades/haarcascade_frontalface_default.xml",
+                 "eyes": "cascades/haarcascade_eye.xml",
+                 "smile": "cascades/haarcascade_smile.xml"}
 
 # Load the Haar Cascade Face Detector from disk
-print("[INFO] Loading face detector...")
+print("Loading face detector")
 detectors = {}
 
 # Loop over the detector paths
 for (name, path) in detectorPaths.items():
     # Load the Haar Cascade from disk and store it in the detectors dictionary
-    path = os.path.sep.join([args["cascade"], path])
     detectors[name] = cv2.CascadeClassifier(path)
 
 # Initialize the video stream and allow the camera sensor to warm up
-print("[INFO] Starting video stream...")
-video_path = "noahfaces.mp4"
+print("Starting video stream")
+video_path = "noahfaces2.mp4"
 vs = VideoStream(src=video_path ).start()
-time.sleep(1.0)
+time.sleep(0.5)
 
 # Loop over the frames from the video stream
+x = 1
 while True:
     # Grab the image from the video stream, resize it and then convert it to grayscale
     frame = vs.read()
@@ -37,10 +33,10 @@ while True:
         frame = imutils.resize(frame, width=500)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         # Perform face detection
-        print("[INFO] Performing face detection...")
+        print("Performing face detection")
         faceRects = detectors["face"].detectMultiScale(gray, scaleFactor=1.05, minNeighbors=5, minSize=(30, 30),
                                                        flags=cv2.CASCADE_SCALE_IMAGE)
-        print("[INFO] {} faces detected!".format(len(faceRects)))
+        print("{} faces detected!".format(len(faceRects)))
         # Loop over the bounding boxes
         for (fX, fY, fW, fH) in faceRects:
         # Extract the face ROI
@@ -70,6 +66,9 @@ while True:
 
         # Show the output image frame
         cv2.imshow("Frame", frame)
+        image_path ="out/saved_image_"+ str(x) +".jpg"
+        x = x+1
+        cv2.imwrite(image_path, frame)
         key = cv2.waitKey(1) & 0xFF
         # If the 'Q' key was pressed, break from the loop
         if key == ord("q"):
