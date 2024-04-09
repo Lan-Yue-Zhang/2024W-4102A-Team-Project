@@ -1,4 +1,5 @@
 from imutils.video import VideoStream
+from imutils.video import FileVideoStream
 import argparse
 import imutils
 import time
@@ -21,14 +22,20 @@ for (name, path) in detectorPaths.items():
 # Initialize the video stream and allow the camera sensor to warm up
 print("Starting video stream")
 video_path = "noahfaces2.mp4"
-vs = VideoStream(src=video_path ).start()
+# vs = VideoStream(src=video_path ).start()
+vs = FileVideoStream(path=video_path).start()
 time.sleep(0.5)
 
+print("start reading")
 # Loop over the frames from the video stream
 x = 1
 while True:
+    print("loop")
+    # time.sleep(0.5)
     # Grab the image from the video stream, resize it and then convert it to grayscale
     frame = vs.read()
+    # time.sleep(0.5)
+    # vs.stream()
     try:
         frame = imutils.resize(frame, width=500)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -72,10 +79,13 @@ while True:
         key = cv2.waitKey(1) & 0xFF
         # If the 'Q' key was pressed, break from the loop
         if key == ord("q"):
+            print("q pressed")
             break
     except:
-        break
+        print("no face")
+        
 
+print("done reading")
 # Do a bit of cleanup
-cv2.destroyAllWindows()
+# cv2.destroyAllWindows()
 vs.stop()
