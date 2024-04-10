@@ -1,4 +1,4 @@
-from imutils.video import VideoStream
+# from imutils.video import VideoStream
 from imutils.video import FileVideoStream
 import argparse
 import imutils
