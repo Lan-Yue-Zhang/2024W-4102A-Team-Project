@@ -11,11 +11,12 @@ detector_paths = {
     "smile": "cascades/haarcascade_smile.xml"
 }
 # Load Haar cascade classifiers
+print("Loading face detector")
 detectors = {name: cv2.CascadeClassifier(path) for name, path in detector_paths.items()}
 
 # Video file path
+print("Loading video")
 video_path = "noahfaces2.mp4"
-
 vs = FileVideoStream(path=video_path).start()
 time.sleep(1.0)
 
@@ -32,6 +33,7 @@ while True:
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         # Detect faces
+        print("Performing face detection")
         faces = detectors["face"].detectMultiScale(gray, scaleFactor=1.05, minNeighbors=5, minSize=(30, 30),
                                                        flags=cv2.CASCADE_SCALE_IMAGE)
         
@@ -64,6 +66,7 @@ while True:
         cv2.imshow("Frame", frame)
         
         # Write frame to file
+        print("Save image")
         image_path ="out/saved_image_"+ str(frame_number) +".jpg"
         frame_number = frame_number+1
         cv2.imwrite(image_path, frame)
@@ -74,6 +77,7 @@ while True:
             print("q pressed")
             break
     except:
+        print("no face")
         break
 print("done reading")
 # Do a bit of cleanup
