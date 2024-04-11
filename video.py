@@ -20,6 +20,7 @@ vs = FileVideoStream(path=video_path).start()
 time.sleep(1.0)
 
 # Loop over frames
+print("start reading")
 frame_number = 1
 while True:
     # Grab the image from the video stream, resize it and then convert it to grayscale
@@ -74,7 +75,7 @@ while True:
             break
     except:
         break
-
+print("done reading")
 # Do a bit of cleanup
 cv2.destroyAllWindows()
 vs.stop()
